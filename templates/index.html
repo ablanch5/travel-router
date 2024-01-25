@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="description" content="Webpage description goes here" />
+  <meta charset="utf-8">
+  <title>Traveller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/index.css"/>
+</head>
+
+<body>
+  <p>Pick your wifi network</p>
+  <br>
+  <form action="/submit" method="post">
+  <div>
+    <div style="display: inline-block">
+      <table>
+      <tr><th></th></tr>
+      {% for ssid in ssids %}
+      <tr>
+        <td>
+          <input type="radio" id={{ ssid }} name="ssid" value={{ ssid }}>
+        </td>
+      </tr>
+      {% endfor %}
+      </table>
+    </div>
+    <div style="display: inline-block">
+      <table>
+        <tr>
+          {% for header in WIFI_FIELDS %}
+          <th style="text-align: right">{{header}}</th>
+          {% endfor %}
+        </tr>
+        {% for stats in wifi_stats %}
+        <tr>
+          {% for stat in stats %}
+          <td style="text-align: right">{{ stat }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <br>
+  <label for="passowrd">Password: </label>
+  <input type="password" id="password" name="password">
+  <br>
+  <input type="submit" value="Connect">
+  </form>
+</body>
+
+</html>
