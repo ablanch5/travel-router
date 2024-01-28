@@ -1,21 +1,27 @@
 from flask import Flask, render_template, request
 import subprocess
-import argparse
+import setup_ap
 
 WIFI_FIELDS = "SSID,SIGNAL,BARS,SECURITY"
 
-# get device name for wifi client from command line argument
-parser = argparse.ArgumentParser()
-parser.add_argument("client_ifname")
-args = parser.parse_args()
-client_ifname = args.client_ifname
-
-
 app = Flask(__name__, static_url_path='/static')
 
-
 @app.route('/')
-def index():
+def setup():
+    return render_template("setup.html")
+
+@app.route('/connect', methods=['POST'])
+def connect():
+    
+    #setup access point
+    if request.method == 'POST':
+        global client_ifname 
+        client_ifname= request.form['client_ifname']
+        ap_ifname = request.form['ap_ifname']
+        ap_ssid = request.form['ap_ssid']
+        ap_pwd = request.form['ap_pwd']
+        setup_ap.set(ap_ifname, ap_ssid, ap_pwd)
+
     # get wifi network information using nmcli
     stats_command = f"nmcli -t --fields {WIFI_FIELDS} device wifi list ifname {client_ifname}"
     wifi_stats = subprocess.check_output(stats_command, shell=True, text=True)
@@ -26,7 +32,7 @@ def index():
     wifi_stats_tuple = tuple([tuple(wifi.split(':')) for wifi in wifi_stats_list])
     # extract ssid column from each row of wifi_stats_tuple
     ssids = [stats[0] for stats in wifi_stats_tuple]
-    return render_template("index.html", 
+    return render_template("connect.html", 
                            ssids=ssids,
                            WIFI_FIELDS=WIFI_FIELDS.split(','), 
                            wifi_stats=wifi_stats_tuple)

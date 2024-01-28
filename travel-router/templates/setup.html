@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Setup</title>
+  <meta name="description" content="Set up" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/index.css"/>
+</head>
+
+<body>
+    <p>Set up your container</p>
+    <br>
+    <form action="/submit" method="post">
+        <label for="client_ifname">Client interface name(ifname):</label>
+        <input type="text" id="client_ifname" name="client_ifname"><br><br>
+        <label for="ap_ifname">Access Point interface name(ifname):</label>
+        <input type="text" id="ap_ifname" name="ap_ifname"><br><br>
+        <label for="ap_ssid">Access Point SSID:</label>
+        <input type="text" id="ap_ssid" name="ap_ssid"><br><br>
+        <label for="ap_pwd">Access Point password:</label>
+        <input type="password" id="ap_pwd" name="ap_pwd"><br><br>
+        <input type="submit" value="Set up">
+    </form>
+</body>
+
+</html>
