@@ -1,9 +1,10 @@
 import subprocess
 import argparse
 
+AP__CON_NAME = 'Hotspot'
 def setup(ap_ifname, ap_ssid, ap_pwd):
     run_command = f"sudo nmcli device wifi hotspot ssid {ap_ssid} password {ap_pwd} ifname \
-                    {ap_ifname}"
+                    {ap_ifname} con-name {AP__CON_NAME}"
     subprocess.run(run_command, shell=True)
     modify_command = "sudo nmcli connection modify Hotspot \
                 connection.autoconnect yes connection.autoconnect-priority 100"
