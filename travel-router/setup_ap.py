@@ -1,7 +1,7 @@
 import subprocess
 import argparse
 
-AP__CON_NAME = 'Hotspot'
+AP__CON_NAME = 'acess_point'
 def setup(ap_ifname, ap_ssid, ap_pwd):
     run_command = f"sudo nmcli device wifi hotspot ssid {ap_ssid} password {ap_pwd} ifname \
                     {ap_ifname} con-name {AP__CON_NAME}"
