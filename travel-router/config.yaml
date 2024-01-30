@@ -1,0 +1,5 @@
+ap_ifname: onboardwifi
+ap_pwd: Andre1Marie1
+ap_ssid: traveller2
+client_ifname: wlxf0a731b0a5b3
+is_configured: true

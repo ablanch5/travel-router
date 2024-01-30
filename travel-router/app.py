@@ -11,7 +11,8 @@ app = Flask(__name__, static_url_path='/static')
 @app.route('/', methods=['GET','POST'])
 def index():
     print(os.getcwd())
-    print(os.listdir(os.cwd()))
+    print(os.listdir(os.getcwd()))
+    print('\n')
     with open('config.yaml', 'r') as file:
         config = yaml.safe_load(file)
     is_configured = config['is_configured']
@@ -34,8 +35,9 @@ def configured():
         config['ap_ssid'] = request.form['ap_ssid']
         config['ap_pwd'] = request.form['ap_pwd']
         config['is_configured'] = True
+        setup_ap.setup(config['ap_ifname'], config['ap_ssid'], config['ap_pwd'])
         with open('config.yaml', 'w') as file:
-            yaml.dump(config, 'config.yaml')
+            yaml.dump(config, file)
     return render_template("configured.html")
 
 @app.route('/connect')
@@ -44,10 +46,6 @@ def connect():
     with open('config.yaml', 'r') as file:
         config = yaml.safe_load(file)
     client_ifname= config['client_ifname']
-    ap_ifname = config['ap_ifname']
-    ap_ssid = config['ap_ssid']
-    ap_pwd = config['ap_pwd']
-    setup_ap.setup(ap_ifname, ap_ssid, ap_pwd)
 
     # get wifi network information using nmcli
     stats_command = f"nmcli -t --fields {WIFI_FIELDS} device wifi list ifname {client_ifname}"
@@ -75,14 +73,14 @@ def submit():
         client_ssid = request.form['ssid']
         client_pwd = request.form['password']
         # connect to wifi network with ssid and password
-        connection_command = f"nmcli --colors no device wifi connect {client_ssid} ifname \
+        connection_command = f"sudo nmcli --colors no device wifi connect {client_ssid} ifname \
                             {client_ifname} password {client_pwd}"
         result = subprocess.run(connection_command, capture_output=True, text=True, shell=True)
         response = ''
         if result.stderr == '':
             response = "Connection Successful!"
         else:
-            response = "Connection Failed"
+            response = result.stderr
         return render_template("submit.html", response=response)
     
 app.run(host='0.0.0.0', port=5000, debug=True)
